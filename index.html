@@ -71,17 +71,22 @@
     </style>
 </head>
 <body>
+    <!-- Password Page -->
     <div id="password-container" class="container">
         <div class="content-box">
-            <h1>လျှို့ဝှက်ကုဒ်ထည့်ပါ</h1>
-            <input type="password" id="password-input" placeholder="Enter password here"><br><br>
+            <h1>အမှတ်တရစကားလုံးထည့်ပါ</h1>
+            <input type="password" id="password-input" placeholder="ဒီနေရာမှာ ထည့်ပေးနော်..."><br><br>
             <button id="password-button">ဝင်မည်</button>
         </div>
     </div>
+
+    <!-- Heart Prompt Page (Hidden Initially) -->
     <div id="heart-prompt-container" class="container" style="display: none;">
         <div class="heart-icon">❤️</div>
         <p>အသည်းပုံလေးကိုနှိပ်ပါ</p>
     </div>
+
+    <!-- Main Content (Hidden Initially) -->
     <div id="main-content" class="container" style="display: none;">
         <div class="content-box">
             <div class="rainbow-text">
@@ -94,17 +99,18 @@
                 <br>
                 <p style="text-align: right;">စိတ်ရင်းဖြင့်၊<br>[ကျနော်/YYA]</p>
             </div>
-            <br>
-            <button id="exit-button">ရူးနေတာမလား?</button>
         </div>
     </div>
+
+    <!-- Exit Confirmation Modal -->
     <div id="exit-modal">
         <div class="modal-content">
-            <h2>တကယ်ထွက်မှာလား?</h2>
+            <h2>ရူးနေတာမလား?</h2>
             <button id="exit-yes">ရူးနေတယ်</button>
             <button id="exit-no">မရူးဘူး</button>
         </div>
     </div>
+    
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const passwordContainer = document.getElementById('password-container');
@@ -112,12 +118,18 @@
             const passwordButton = document.getElementById('password-button');
             const heartPromptContainer = document.getElementById('heart-prompt-container');
             const mainContent = document.getElementById('main-content');
-            const exitButton = document.getElementById('exit-button');
             const exitModal = document.getElementById('exit-modal');
             const exitYesButton = document.getElementById('exit-yes');
             const exitNoButton = document.getElementById('exit-no');
             const correctPassword = 'demana';
-            passwordButton.addEventListener('click', () => {
+
+            // --- Password Page Logic ---
+            passwordButton.addEventListener('click', enterSite);
+            passwordInput.addEventListener('keyup', (event) => {
+                if (event.key === 'Enter') { enterSite(); }
+            });
+
+            function enterSite() {
                 if (passwordInput.value.toLowerCase() === correctPassword) {
                     passwordContainer.style.display = 'none';
                     heartPromptContainer.style.display = 'flex';
@@ -125,17 +137,40 @@
                     alert('စကားဝှက် မှားနေပါတယ်နော်!');
                     passwordInput.value = '';
                 }
-            });
-             passwordInput.addEventListener('keyup', (event) => {
-                if (event.key === 'Enter') {
-                    passwordButton.click();
-                }
-            });
+            }
+
+            // --- Heart Page Logic ---
             heartPromptContainer.addEventListener('click', () => {
                 heartPromptContainer.style.display = 'none';
                 mainContent.style.display = 'flex';
+                // Activate the back button logic only after the main content is shown
+                window.history.pushState({ noBackExits: true }, '');
                 setInterval(createHeart, 300);
             });
+
+            // --- Back Button Logic ---
+            window.addEventListener('popstate', function(event) {
+                if (mainContent.style.display === 'flex') {
+                    exitModal.style.display = 'flex';
+                    // This keeps the user on the page
+                    window.history.pushState({ noBackExits: true }, '');
+                }
+            });
+
+            // --- Exit Modal Logic ---
+            exitYesButton.addEventListener('click', () => {
+                // This will bypass the popstate listener and close the window
+                window.removeEventListener('popstate', () => {});
+                alert('Bye Bye... See you again! <3');
+                window.close();
+            });
+            
+            exitNoButton.addEventListener('click', () => {
+                alert('မရူးရင် ထွက်လို့မရသေးပါဘူး :P');
+                exitModal.style.display = 'none';
+            });
+            
+            // --- Heart Animation ---
             function createHeart() {
                 const heart = document.createElement('div');
                 heart.classList.add('heart');
@@ -145,15 +180,6 @@
                 document.body.appendChild(heart);
                 setTimeout(() => { heart.remove(); }, 6000);
             }
-            exitButton.addEventListener('click', () => { exitModal.style.display = 'flex'; });
-            exitYesButton.addEventListener('click', () => {
-                alert('Bye Bye... See you again! <3');
-                window.close();
-            });
-            exitNoButton.addEventListener('click', () => {
-                alert('မရူးရင် ထွက်လို့မရသေးပါဘူး :P');
-                exitModal.style.display = 'none';
-            });
         });
     </script>
 </body>
