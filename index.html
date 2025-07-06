@@ -160,7 +160,188 @@
             // --- Exit Modal Logic ---
             exitYesButton.addEventListener('click', () => {
                 // This will bypass the popstate listener and close the window
+                window.removeEve<!DOCTYPE html>
+<html lang="my">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Special Wish For You</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Padauk', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #fce4ec, #f8bbd0);
+            color: #333;
+            overflow: hidden;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        .content-box {
+            background-color: rgba(255, 255, 255, 0.85);
+            border-radius: 15px;
+            padding: 20px 30px;
+            max-width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        input[type="password"] {
+            padding: 12px; margin: 10px; border: 2px solid #ff80ab;
+            border-radius: 8px; width: 250px; font-size: 18px;
+        }
+        button {
+            padding: 12px 25px; background-color: #ff4081; color: white;
+            border: none; border-radius: 8px; cursor: pointer;
+            font-size: 18px; font-weight: bold; transition: background-color 0.3s;
+        }
+        button:hover { background-color: #f50057; }
+        #heart-prompt-container .heart-icon {
+            font-size: 120px; cursor: pointer; animation: beat 1.5s infinite; color: #e91e63;
+        }
+        #heart-prompt-container p { font-size: 24px; color: #c2185b; font-weight: bold; }
+        @keyframes beat { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.15); } }
+        .rainbow-text {
+            font-size: 1.2em; line-height: 1.8; text-align: justify;
+            font-weight: bold; animation: rainbow 6s linear infinite;
+        }
+        @keyframes rainbow { 0%{color:red}15%{color:orange}30%{color:yellow}45%{color:green}60%{color:blue}75%{color:indigo}90%{color:violet}100%{color:red} }
+        .heart {
+            position: absolute; font-size: 24px; color: red; opacity: 0;
+            animation: flyUp 6s linear infinite; pointer-events: none; z-index: -1;
+        }
+        @keyframes flyUp { 0% { transform: translateY(0); opacity: 1; } 100% { transform: translateY(-100vh); opacity: 0; } }
+        #exit-modal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.6); display: none;
+            justify-content: center; align-items: center; z-index: 100;
+        }
+        .modal-content {
+            background-color: white; padding: 40px; border-radius: 15px;
+            text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        .modal-content h2 { margin-bottom: 25px; color: #333; }
+        .modal-content button { margin: 0 15px; }
+        #exit-yes { background-color: #4CAF50; } #exit-no { background-color: #f44336; }
+    </style>
+</head>
+<body>
+    <!-- Password Page -->
+    <div id="password-container" class="container">
+        <div class="content-box">
+            <h1>အမှတ်တရစကားလုံးထည့်ပါ</h1>
+            <input type="password" id="password-input" placeholder="ဒီနေရာမှာ ထည့်ပေးနော်..."><br><br>
+            <button id="password-button">ဝင်မည်</button>
+        </div>
+    </div>
+
+    <!-- Heart Prompt Page (Hidden Initially) -->
+    <div id="heart-prompt-container" class="container" style="display: none;">
+        <div class="heart-icon">❤️</div>
+        <p>အသည်းပုံလေးကိုနှိပ်ပါ</p>
+    </div>
+
+    <!-- Main Content (Hidden Initially) -->
+    <div id="main-content" class="container" style="display: none;">
+        <div class="content-box">
+            <div class="rainbow-text">
+                <p>ဒီစာဖတ်သူဒေါ်ယမင်းစန္ဒါအောင်သည်အရူးဖြစ်ပါသသည်</p>
+                <br>
+                <p style="text-align: right;">ပံု၊<br>[ချစ်တီးမ/YMSDA]</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Exit Confirmation Modal -->
+    <div id="exit-modal">
+        <div class="modal-content">
+            <h2>ရူးနေတာမလား?</h2>
+            <button id="exit-yes">ရူးနေတယ်</button>
+            <button id="exit-no">မရူးဘူး</button>
+        </div>
+    </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const passwordContainer = document.getElementById('password-container');
+            const passwordInput = document.getElementById('password-input');
+            const passwordButton = document.getElementById('password-button');
+            const heartPromptContainer = document.getElementById('heart-prompt-container');
+            const mainContent = document.getElementById('main-content');
+            const exitModal = document.getElementById('exit-modal');
+            const exitYesButton = document.getElementById('exit-yes');
+            const exitNoButton = document.getElementById('exit-no');
+            const correctPassword = 'demana';
+
+            // --- Password Page Logic ---
+            passwordButton.addEventListener('click', enterSite);
+            passwordInput.addEventListener('keyup', (event) => {
+                if (event.key === 'Enter') { enterSite(); }
+            });
+
+            function enterSite() {
+                if (passwordInput.value.toLowerCase() === correctPassword) {
+                    passwordContainer.style.display = 'none';
+                    heartPromptContainer.style.display = 'flex';
+                } else {
+                    alert('စကားဝှက် မှားနေပါတယ်နော်!');
+                    passwordInput.value = '';
+                }
+            }
+
+            // --- Heart Page Logic ---
+            heartPromptContainer.addEventListener('click', () => {
+                heartPromptContainer.style.display = 'none';
+                mainContent.style.display = 'flex';
+                // Activate the back button logic only after the main content is shown
+                window.history.pushState({ noBackExits: true }, '');
+                setInterval(createHeart, 300);
+            });
+
+            // --- Back Button Logic ---
+            window.addEventListener('popstate', function(event) {
+                if (mainContent.style.display === 'flex') {
+                    exitModal.style.display = 'flex';
+                    // This keeps the user on the page
+                    window.history.pushState({ noBackExits: true }, '');
+                }
+            });
+
+            // --- Exit Modal Logic ---
+            exitYesButton.addEventListener('click', () => {
+                // This will bypass the popstate listener and close the window
                 window.removeEventListener('popstate', () => {});
+                alert('Bye Bye... See you again! <3');
+                window.close();
+            });
+            
+            exitNoButton.addEventListener('click', () => {
+                alert('မရူးရင် ထွက်လို့မရသေးပါဘူး :P');
+                exitModal.style.display = 'none';
+            });
+            
+            // --- Heart Animation ---
+            function createHeart() {
+                const heart = document.createElement('div');
+                heart.classList.add('heart');
+                heart.innerHTML = '❤️';
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.animationDuration = Math.random() * 2 + 4 + 's';
+                document.body.appendChild(heart);
+                setTimeout(() => { heart.remove(); }, 6000);
+            }
+        });
+    </script>
+</body>
+</html>
+ntListener('popstate', () => {});
                 alert('Bye Bye... See you again! <3');
                 window.close();
             });
